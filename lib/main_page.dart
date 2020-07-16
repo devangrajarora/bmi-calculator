@@ -3,7 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'card_body.dart';
 import 'top_card.dart';
 
-const cardColour = Color(0xFF1D1E33);
+enum Gender { male, female }
+
+const activeCardColour = Color(0xFF1D1E33);
+const inactiveCardColour = Color(0xFF111328);
 const bottomButtonColour = Color(0xFFE54455);
 const bottomButtonHeight = 70.0;
 
@@ -13,20 +16,40 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Color maleCardColour = inactiveCardColour;
+  Color femaleCardColour = inactiveCardColour;
+  Gender currGender;
+
+  void updateGender(Gender gender) {
+    setState(() {
+      currGender = gender;
+      maleCardColour =
+          (gender == Gender.male) ? activeCardColour : inactiveCardColour;
+      femaleCardColour =
+          (gender == Gender.female) ? activeCardColour : inactiveCardColour;
+    });
+  }
+
   Expanded topCards() {
     return Expanded(
       child: Row(
         children: <Widget>[
           Expanded(
-            child: MyCard(
-              colour: cardColour,
-              content: TopCard(icon: FontAwesomeIcons.mars, text: 'MALE'),
+            child: GestureDetector(
+              onTap: () => updateGender(Gender.male),
+              child: MyCard(
+                colour: maleCardColour,
+                content: TopCard(icon: FontAwesomeIcons.mars, text: 'MALE'),
+              ),
             ),
           ),
           Expanded(
-            child: MyCard(
-              colour: cardColour,
-              content: TopCard(icon: FontAwesomeIcons.venus, text: 'FEMALE'),
+            child: GestureDetector(
+              onTap: () => updateGender(Gender.female),
+              child: MyCard(
+                colour: femaleCardColour,
+                content: TopCard(icon: FontAwesomeIcons.venus, text: 'FEMALE'),
+              ),
             ),
           ),
         ],
@@ -37,7 +60,7 @@ class _MainPageState extends State<MainPage> {
   Expanded middleCard() {
     return Expanded(
       child: MyCard(
-        colour: cardColour,
+        colour: activeCardColour,
       ),
     );
   }
@@ -48,12 +71,12 @@ class _MainPageState extends State<MainPage> {
         children: <Widget>[
           Expanded(
             child: MyCard(
-              colour: cardColour,
+              colour: activeCardColour,
             ),
           ),
           Expanded(
             child: MyCard(
-              colour: cardColour,
+              colour: activeCardColour,
             ),
           ),
         ],
